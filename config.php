@@ -331,18 +331,158 @@ function saveJual()
     }
   }
 }
+
+
 function editJual()
+{
+  $conn = koneksi();
+
+  $id = $_POST['id_produk'];
+  $nama = $_POST['nama_produk'];
+  $harga = $_POST['harga'];
+
+  // Buat query untuk mengupdate data produk berdasarkan ID
+  $query = "UPDATE produk_jual SET nama_produk = '$nama', harga = $harga WHERE id_produk = '$id'";
+
+  // Jalankan query dan periksa apakah update berhasil
+  if (mysqli_query($conn, $query)) {
+    return true;
+  } else {
+    // Menangani error jika terjadi kesalahan saat menjalankan query
+    error_log('Query error: ' . mysqli_error($conn));
+    return false;
+  }
+}
+
+function saveSewa()
 {
   $nama_produk = $_POST["nama_produk"];
   $harga = $_POST["harga"];
   $conn = koneksi();
   if (isset($_POST["simpan"])) {
-    $stmt = $conn->prepare("INSERT INTO produk_jual (nama_produk, harga) VALUES ('$nama_produk','$harga' )");
+    $stmt = $conn->prepare("INSERT INTO produk_sewa (nama_produk, harga) VALUES ('$nama_produk','$harga' )");
 
     if ($stmt->execute()) {
       echo "<script>
               alert('Berhasil Ditambahkan!');
-              window.location.href='produk_jual.php';
+              window.location.href='produk_sewa.php';
+            </script>";
+      $stmt->close();
+      return true;
+    } else {
+      echo "<script>alert('Gagal Ditambahkan!');</script>";
+      $stmt->close();
+      return false;
+    }
+  }
+}
+
+
+function editSewa()
+{
+  $conn = koneksi();
+
+  $id = $_POST['id_produk'];
+  $nama = $_POST['nama_produk'];
+  $harga = $_POST['harga'];
+
+  // Buat query untuk mengupdate data produk berdasarkan ID
+  $query = "UPDATE produk_sewa SET nama_produk = '$nama', harga = $harga WHERE id_produk = '$id'";
+
+  // Jalankan query dan periksa apakah update berhasil
+  if (mysqli_query($conn, $query)) {
+    return true;
+  } else {
+    // Menangani error jika terjadi kesalahan saat menjalankan query
+    error_log('Query error: ' . mysqli_error($conn));
+    return false;
+  }
+}
+
+function savedaftarSewa()
+{
+  $id_produk = $_POST["id_produk"];
+  $tanggal = $_POST["tanggal"];
+  $nama_user = $_POST["nama_user"];
+  $conn = koneksi();
+  if (isset($_POST["simpan"])) {
+    $stmt = $conn->prepare("INSERT INTO sewa (id_produk, tanggal, nama_user, `status`) VALUES ('$id_produk','$tanggal', '$nama_user', 'Belum Diproses' )");
+
+    if ($stmt->execute()) {
+      echo "<script>
+              alert('Berhasil Ditambahkan!');
+              window.location.href='daftar_sewa.php';
+            </script>";
+      $stmt->close();
+      return true;
+    } else {
+      echo "<script>alert('Gagal Ditambahkan!');</script>";
+      $stmt->close();
+      return false;
+    }
+  }
+}
+
+function inUse()
+{
+  $conn = koneksi();
+  $id = $_GET["id"];
+
+  $stmt = $conn->prepare("UPDATE sewa SET `status` = 'Done' WHERE id_sewa='$id'");
+  //   echo "<script>
+  //   alert('Berhasil Proses!');
+  //   window.location.href='daftar_sewa.php';
+  // </script>";
+  if ($stmt->execute()) {
+    echo "<script>
+          alert('Berhasil Ditambahkan!');
+          window.location.href='daftar_sewa.php';
+        </script>";
+    $stmt->close();
+    return true;
+  } else {
+    echo "<script>alert('Gagal Ditambahkan!');</script>";
+    $stmt->close();
+    return false;
+  }
+}
+function belumProses()
+{
+  $conn = koneksi();
+  $id = $_GET["id"];
+
+  $stmt = $conn->prepare("UPDATE sewa SET `status` = 'In Use' WHERE id_sewa='$id'");
+  //   echo "<script>
+  //   alert('Berhasil Proses!');
+  //   window.location.href='daftar_sewa.php';
+  // </script>";
+  if ($stmt->execute()) {
+    echo "<script>
+          alert('Berhasil Ditambahkan!');
+          window.location.href='daftar_sewa.php';
+        </script>";
+    $stmt->close();
+    return true;
+  } else {
+    echo "<script>alert('Gagal Ditambahkan!');</script>";
+    $stmt->close();
+    return false;
+  }
+}
+
+function savedaftarJual()
+{
+  $id_produk = $_POST["id_produk"];
+  $tanggal = $_POST["tanggal"];
+  $nama_user = $_POST["nama_user"];
+  $conn = koneksi();
+  if (isset($_POST["simpan"])) {
+    $stmt = $conn->prepare("INSERT INTO jual (id_produk, tanggal, nama_user, `status`) VALUES ('$id_produk','$tanggal', '$nama_user', 'Belum Diproses' )");
+
+    if ($stmt->execute()) {
+      echo "<script>
+              alert('Berhasil Ditambahkan!');
+              window.location.href='daftar_jual.php';
             </script>";
       $stmt->close();
       return true;

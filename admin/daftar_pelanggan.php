@@ -17,7 +17,7 @@ include "header.php";
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">Dashboard</h1>
+          <h1 class="m-0">Daftar Pelanggan</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
@@ -126,6 +126,16 @@ include "header.php";
         {
           extend: 'pdfHtml5',
           title: 'Data Pelanggan',
+          pageSize: 'A4', // Set ukuran halaman ke A4
+          orientation: 'portrait', // Atur orientasi halaman ke potrait
+          customize: function(doc) {
+            // Atur posisi teks ke tengah halaman
+            doc.content[1].margin = [100, 0, 100, 0];
+            // Pastikan tabel dan konten tidak melebihi satu halaman
+            doc.styles.tableHeader.alignment = 'center'; // Header tabel menjadi rata tengah
+            doc.defaultStyle.alignment = 'center'; // Semua konten menjadi rata tengah
+            doc.content[1].layout = 'noBorders'; // Menghilangkan border tabel
+          },
           exportOptions: {
             columns: [0, 1, 2, 3]
           }
@@ -134,6 +144,7 @@ include "header.php";
     });
   });
 </script>
+
 </body>
 
 </html>

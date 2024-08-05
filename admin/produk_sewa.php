@@ -6,41 +6,80 @@ if (!isset($_SESSION["login_admin"])) {
 }
 
 $sql_sewa = sql("SELECT * FROM produk_sewa");
-$sql_user = sql("SELECT * FROM user WHERE `level`='1'");
 $no = 1;
+
+if (isset($_POST["simpan"])) {
+  $jual = saveSewa();
+}
+
+if (isset($_POST['edit'])) {
+
+  if (editSewa()) {
+    echo "<script>alert('Produk berhasil diperbarui!'); window.location.href='produk_sewa.php';</script>";
+  } else {
+    echo "<script>alert('Gagal memperbarui produk.'); window.location.href='produk_sewa.php';</script>";
+  }
+}
+
 
 include "header.php";
 ?>
 
-<!-- Content Wrapper. Contains page content -->
+<!-- Konten Utama -->
 <div class="content-wrapper">
-  <!-- Content Header (Page header) -->
+  <!-- Header Konten -->
   <div class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
           <h1 class="m-0">Daftar Produk Sewa</h1>
-        </div><!-- /.col -->
+        </div>
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Beranda</a></li>
             <li class="breadcrumb-item active">Dashboard</li>
           </ol>
-        </div><!-- /.col -->
-      </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
+        </div>
+      </div>
+    </div>
   </div>
-  <!-- /.content-header -->
 
-  <!-- Main content -->
+  <!-- Konten Utama -->
   <section class="content">
     <div class="container-fluid">
-      <!-- Info boxes -->
       <div class="row">
-        <!-- Content Row -->
-        <!-- Data Table -->
         <div class="card-body">
-          <a href="#" class="btn btn-sm btn-success mb-3">Tambah Produk</a>
+          <button type="button" class="btn btn-primary btn-sm mb-2" data-toggle="modal" data-target="#exampleModal">
+            Tambah Produk
+          </button>
+
+          <!-- Modal Tambah Produk -->
+          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Tambah Produk</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form action="" method="post">
+                    <label for="nama_produk">Nama Produk</label>
+                    <input type="text" name="nama_produk" id="nama_produk" class="form-control mb-2" required placeholder="Masukkan Nama Produk">
+                    <label for="harga">Harga Produk</label>
+                    <input type="text" name="harga" id="harga" class="form-control" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))" required placeholder="Masukkan Harga Produk">
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                  <button type="submit" name="simpan" class="btn btn-primary">Simpan Perubahan</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tabel Produk -->
           <div class="table-responsive">
             <table class="table table-bordered" id="myTable" width="100%" cellspacing="0">
               <thead>
@@ -48,7 +87,7 @@ include "header.php";
                   <th width=5%>No</th>
                   <th>Nama Produk</th>
                   <th>Harga</th>
-                  <th>Aksi</th>
+                  <th style="width: 14%;">Aksi</th>
                 </tr>
               </thead>
               <tbody>
@@ -56,8 +95,14 @@ include "header.php";
                   <tr>
                     <th class="text-center"><?= $no; ?></th>
                     <th><?= $transaksi['nama_produk']; ?></th>
-                    <th><?= $transaksi['harga']; ?></th>
-                    <th>Hapus | Edit</th>
+                    <th>Rp. <?= number_format($transaksi['harga']); ?></th>
+                    <th>
+                      <!-- Tombol untuk memicu modal edit -->
+                      <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editSewa" data-id="<?= $transaksi['id_produk']; ?>" data-nama="<?= $transaksi['nama_produk']; ?>" data-harga="<?= $transaksi['harga']; ?>">
+                        Edit
+                      </button>
+                      <a href="hapus_sewa.php?id=<?= $transaksi['id_produk']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Hapus</a>
+                    </th>
                   </tr>
                 <?php
                   $no++;
@@ -68,27 +113,42 @@ include "header.php";
         </div>
       </div>
     </div>
-    <!-- /.row -->
   </section>
-  <!-- /.content -->
 </div>
-<!-- /.content-wrapper -->
 
-<!-- Control Sidebar -->
-<aside class="control-sidebar control-sidebar-dark">
-  <!-- Control sidebar content goes here -->
-</aside>
-<!-- /.control-sidebar -->
+<!-- Modal Edit -->
+<div class="modal fade" id="editSewa" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Produk</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="" method="post">
+          <input type="hidden" name="id_produk" id="edit-id">
+          <label for="nama_produk">Nama Produk</label>
+          <input type="text" name="nama_produk" id="edit-nama" class="form-control mb-2" required>
+          <label for="harga">Harga Produk</label>
+          <input type="text" name="harga" id="edit-harga" class="form-control" onkeypress="return (event.charCode != 8 && event.charCode == 0 || (event.charCode >= 48 && event.charCode <= 57))" required>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+        <button type="submit" name="edit" class="btn btn-primary">Simpan Perubahan</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
-<!-- Main Footer -->
+<!-- Footer -->
 <footer class="main-footer">
-  <strong>Copyright &copy; 2024 BangJohn Sport Fishing Copyright</strong>
-  All rights reserved.
+  <strong>Hak Cipta &copy; 2024 BangJohn Sport Fishing. Semua hak dilindungi.</strong>
 </footer>
-</div>
-<!-- ./wrapper -->
 
-<!-- REQUIRED SCRIPTS -->
+<!-- SCRIPTS -->
 <!-- jQuery -->
 <script src="plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap -->
@@ -98,8 +158,7 @@ include "header.php";
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.js"></script>
 
-<!-- PAGE PLUGINS -->
-<!-- jQuery Mapael -->
+<!-- PLUGINS -->
 <script src="plugins/jquery-mousewheel/jquery.mousewheel.js"></script>
 <script src="plugins/raphael/raphael.min.js"></script>
 <script src="plugins/jquery-mapael/jquery.mapael.min.js"></script>
@@ -107,7 +166,7 @@ include "header.php";
 <!-- ChartJS -->
 <script src="plugins/chart.js/Chart.min.js"></script>
 
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<!-- AdminLTE dashboard demo -->
 <script src="dist/js/pages/dashboard2.js"></script>
 
 <!-- Datatables -->
@@ -121,14 +180,14 @@ include "header.php";
       dom: 'Bfrtip',
       buttons: [{
           extend: 'excelHtml5',
-          title: 'Data Pelanggan',
+          title: 'Data Produk',
           exportOptions: {
             columns: [0, 1, 2, 3]
           }
         },
         {
           extend: 'pdfHtml5',
-          title: 'Data Pelanggan',
+          title: 'Data Produk',
           exportOptions: {
             columns: [0, 1, 2, 3]
           }
@@ -136,7 +195,17 @@ include "header.php";
       ]
     });
   });
-</script>
-</body>
 
-</html>
+  // JavaScript untuk mempopulasi modal edit dengan data yang benar
+  $('#editSewa').on('show.bs.modal', function(event) {
+    var button = $(event.relatedTarget); // Tombol yang memicu modal
+    var id = button.data('id'); // Ambil informasi dari data-* attributes
+    var nama = button.data('nama');
+    var harga = button.data('harga');
+
+    var modal = $(this);
+    modal.find('#edit-id').val(id);
+    modal.find('#edit-nama').val(nama);
+    modal.find('#edit-harga').val(harga);
+  });
+</script>

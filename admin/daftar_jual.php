@@ -7,6 +7,12 @@ if (!isset($_SESSION["login_admin"])) {
 
 $sql_user = sql("SELECT * FROM user WHERE `level`='1'");
 $no = 1;
+$sql_produk = sql("SELECT * FROM produk_jual");
+$now = date('Y-m-d');
+
+if (isset($_POST["simpan"])) {
+  $jual = savedaftarJual();
+}
 
 include "header.php";
 ?>
@@ -42,28 +48,63 @@ include "header.php";
           <form class="row g-3" action="" method="post">
             <div class="col-auto">
               <label for="">Dari Tanggal</label>
-              <input type="date" class="form-control" name="tj_awal" required>
+              <input type="date" class="form-control" name="ts_awal" required>
             </div>
             <div class="col-auto">
               <label for="">Ke Tanggal</label>
-              <input type="date" class="form-control" name="tj_akhir" required>
+              <input type="date" class="form-control" name="ts_akhir" required>
             </div>
             <div class="col-auto mt-4">
-              <button type="submit" class="btn btn-primary btn-sm" name="simpan">Simpan</button>
-              <a href="daftar_jual.php" class="btn btn-outline-success text-white btn-sm">Reset</a>
+              <button type="submit" class="btn btn-primary btn-sm" name="simpan_tanggal">Simpan</button>
+              <a href="daftar_sewa.php" class="btn btn-outline-success text-white btn-sm">Reset</a>
             </div>
           </form>
           <?php
-          if (isset($_POST['simpan'])) {
-            $_SESSION["jawal"] = $_POST["tj_awal"];
-            $_SESSION["jakhir"] = $_POST["tj_akhir"];
-            $sql_jual = sql("SELECT * FROM jual INNER JOIN produk_jual ON jual.id_produk=produk_jual.   id_produk INNER JOIN user ON jual.id_user=user.id_user WHERE jual.tanggal BETWEEN '$_SESSION[jawal]' AND '$_SESSION[jakhir]' ORDER BY jual.tanggal");
+          if (isset($_POST['simpan_tanggal'])) {
+            $_SESSION["sawal"] = $_POST["ts_awal"];
+            $_SESSION["sakhir"] = $_POST["ts_akhir"];
+            $sql_jual = sql("SELECT * FROM jual INNER JOIN produk_jual ON jual.id_produk=produk_jual.   id_produk  WHERE jual.tanggal BETWEEN '$_SESSION[sawal]' AND '$_SESSION[sakhir]' ORDER BY jual.tanggal");
           } else {
-            $sql_jual = sql("SELECT * FROM jual  INNER JOIN produk_jual ON jual.id_produk=produk_jual.   id_produk INNER JOIN user ON jual.id_user=user.id_user ORDER BY `jual`.`tanggal` DESC");
+            $sql_jual = sql("SELECT * FROM jual  INNER JOIN produk_jual ON jual.id_produk=produk_jual.   id_produk ORDER BY `jual`.`tanggal` DESC");
           }
           ?>
           <br>
-          <a href="#" class="btn btn-sm btn-success mb-3">Tambah Jual</a>
+          <button type="button" class="btn btn-primary btn-sm mb-2" data-toggle="modal" data-target="#exampleModal">
+            Tambah Jual
+          </button>
+
+          <!-- Modal Tambah Produk -->
+          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Tambah Produk</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form action="" method="post">
+                    <label for="nama_penyewa">Nama Penyewa</label>
+                    <input type="text" name="nama_user" id="nama_penyewa" class="form-control mb-2" required placeholder="Masukkan Nama Penyewa">
+                    <label for="harga">Jenis Produk</label>
+                    <select class="form-select" aria-label="Default select example" name="id_produk">
+                      <option disabled>- Pilih Jenis Produk -</option>
+                      <?php foreach ($sql_produk as $produk) : ?>
+                        <option value="<?= $produk['id_produk']; ?>"><?= $produk['nama_produk']; ?></option>
+                      <?php endforeach ?>
+                    </select>
+                    <label for="harga">Jenis Produk</label>
+                    <input type="date" name="tanggal" class="form-control" id="tanggal" value="<?= $now; ?>">
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                  <button type="submit" name="simpan" class="btn btn-primary">Simpan Perubahan</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="table-responsive">
             <?php if (isset($sql_jual)) : ?>
               <table class="table table-bordered" id="myTable" width="100%" cellspacing="0">
@@ -73,6 +114,7 @@ include "header.php";
                     <th>Nama Pelanggan</th>
                     <th>Tanggal Transaksi</th>
                     <th>Jenis Barang</th>
+                    <th>Harga</th>
                     <th>Status</th>
                   </tr>
                 </thead>
@@ -83,10 +125,15 @@ include "header.php";
                       <th><?= $transaksi['nama_user']; ?></th>
                       <th><?= $transaksi['tanggal']; ?></th>
                       <th><?= $transaksi['nama_produk']; ?></th>
+                      <th>Rp. <?= number_format($transaksi['harga']); ?></th>
                       <th class="text-center">
                         <?php if ($transaksi['status'] == 'Belum Diproses') { ?>
-                          <a href="proses_transaksi.php?id=<?= $transaksi['id_jual']; ?>" class="btn btn-info btn-sm" onclick="return confirm('Are you sure?')">
+                          <a href="proses_jual.php?id=<?= $transaksi['id_jual']; ?>" class="btn btn-info btn-sm" onclick="return confirm('Are you sure?')">
                             <span class="text">Belum Diproses</span>
+                          </a>
+                        <?php } elseif ($transaksi['status'] == 'In Use') { ?>
+                          <a href="proses_jual.php?id=<?= $transaksi['id_jual']; ?>" class="btn btn-primary btn-sm" onclick="return confirm('Are you sure?')">
+                            <span class="text">In Use</span>
                           </a>
                         <?php } else { ?>
                           <span><?= $transaksi['status']; ?></span>

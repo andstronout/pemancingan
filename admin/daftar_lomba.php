@@ -64,14 +64,14 @@ include "header.php";
           if (isset($_POST['simpan']) && !empty($_POST['t_awal'])) {
             $_SESSION["awal"] = $_POST["t_awal"];
             $sql_produk = sql("SELECT * FROM orders 
-                INNER JOIN user ON orders.id_pelanggan=user.id_user WHERE tanggal='$_SESSION[awal]' AND `status` = 'Fishing'
+                INNER JOIN user ON orders.id_pelanggan=user.id_user WHERE tanggal='$_SESSION[awal]' AND `status` IN ('Fishing', 'Done')
                 ORDER BY tanggal
                 ");
           } elseif (isset($_POST['reset'])) {
             unset($_SESSION["awal"]);
           } elseif (isset($_SESSION["awal"])) {
             $sql_produk = sql("SELECT * FROM orders 
-                INNER JOIN user ON orders.id_pelanggan=user.id_user WHERE tanggal='$_SESSION[awal]' AND `status` = 'Fishing'
+                INNER JOIN user ON orders.id_pelanggan=user.id_user WHERE tanggal='$_SESSION[awal]' AND `status` IN ('Fishing', 'Done')
                 ORDER BY tanggal
                 ");
           }
@@ -115,8 +115,8 @@ include "header.php";
                     <th>Tanggal Transaksi</th>
                     <th>Nomor Tiket</th>
                     <th style="width: 65px;">Berat</th>
-                    <th style="width: 120px;">Durasi (Jam/Menit)</th>
-                    <th width=5% class="text-center">Aksi</th>
+                    <th style="width: 130px;">Durasi (Jam/Menit)</th>
+                    <th width=12% class="text-center">Aksi</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -147,15 +147,20 @@ include "header.php";
                           </div>
                         <?php } ?>
                       </td>
-                      <td>
+                      <td class="text-center">
                         <?php if (empty($transaksi['berat'])) { ?>
                           <button class="btn btn-sm btn-warning" type="submit" name="input">GO</button>
                           </form>
+                        <?php } elseif ($transaksi['status'] == 'Done') {
+                          echo $transaksi['status']; ?>
                         <?php } else { ?>
                           <!-- Button trigger modal -->
                           <button type="button" class="btn btn-sm btn-outline-info" data-toggle="modal" data-target="#editBerat" data-id="<?= $transaksi['id']; ?>" data-berat="<?= $transaksi['berat']; ?>">
                             Edit
                           </button>
+                          <a href="selesai_lomba.php?id=<?= $transaksi['id']; ?>" class="btn btn-primary btn-sm" onclick="return confirm('Are you sure?')">
+                            <span class="text">Done</span>
+                          </a>
 
                           <!-- Bikin SQL untuk cari berat -->
                           <!-- Modal Edit Berat -->
