@@ -32,7 +32,7 @@
         <!-- Notifications Dropdown Menu -->
         <li class="nav-item dropdown">
           <a class="nav-link" data-toggle="dropdown" href="#">
-            <i class="far fa-user"> Halo Admin</i>
+            <i class="far fa-user"> Halo Bang John</i>
           </a>
           <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
             <a href="../logout.php" class="dropdown-item">
@@ -67,73 +67,28 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-book"></i>
-                <p>
-                  Lomba
-                  <i class="fas fa-angle-left right"></i>
-                </p>
+              <a href="daftar_lomba.php" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Daftar Lomba</p>
               </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="daftar_transaksi.php" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Check In Lomba</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="daftar_lomba.php" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Kelola Lomba</p>
-                  </a>
-                </li>
-              </ul>
             </li>
             <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-book"></i>
-                <p>
-                  Kelola Sewa
-                  <i class="fas fa-angle-left right"></i>
-                </p>
+              <a href="daftar_sewa.php" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Daftar Sewa</p>
               </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="produk_sewa.php" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Produk Sewa</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="daftar_sewa.php" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Kelola Sewa</p>
-                  </a>
-                </li>
-              </ul>
             </li>
             <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-book"></i>
-                <p>
-                  Kelola Penjualan
-                  <i class="fas fa-angle-left right"></i>
-                </p>
+              <a href="daftar_jual.php" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Daftar Penjualan</p>
               </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="produk_jual.php" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Produk Jual</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="daftar_jual.php" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Kelola Penjualan</p>
-                  </a>
-                </li>
-              </ul>
+            </li>
+            <li class="nav-item">
+              <a href="daftar_pemenang.php" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Daftar Pemenang Lomba</p>
+              </a>
             </li>
           </ul>
         </nav>

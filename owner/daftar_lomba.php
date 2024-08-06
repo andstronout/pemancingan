@@ -1,10 +1,10 @@
 <?php
 session_start();
 require "../config.php";
-if (!isset($_SESSION["login_admin"])) {
+if (!isset($_SESSION["login_owner"])) {
   header("location:../login.php");
 }
-
+$now = date("Y-m-d");
 $sql_user = sql("SELECT * FROM user WHERE `level`='1'");
 $no = 1;
 
@@ -18,7 +18,7 @@ include "header.php";
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">Check In Lomba</h1>
+          <h1 class="m-0">Daftar Lomba</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
@@ -42,7 +42,7 @@ include "header.php";
           <form class="row g-3" action="" method="post">
             <div class="col-auto">
               <label for="">Cari Tanggal</label>
-              <input type="date" class="form-control mb-2" name="t_hadir">
+              <input type="date" class="form-control mb-2" name="t_awal">
               <button type="submit" class="btn btn-success btn-sm" name="simpan">Simpan</button>
               <button type="submit" class="btn btn-outline-danger btn-sm" name="reset">Reset Tanggal</button>
             </div>
@@ -50,17 +50,17 @@ include "header.php";
             </div>
           </form>
           <?php
-          if (isset($_POST['simpan']) && !empty($_POST['t_hadir'])) {
-            $_SESSION["hadir"] = $_POST["t_hadir"];
+          if (isset($_POST['simpan']) && !empty($_POST['t_awal'])) {
+            $_SESSION["awal"] = $_POST["t_awal"];
             $sql_produk = sql("SELECT * FROM orders 
-                INNER JOIN user ON orders.id_pelanggan=user.id_user WHERE tanggal='$_SESSION[hadir]'
+                INNER JOIN user ON orders.id_pelanggan=user.id_user WHERE tanggal='$_SESSION[awal]' AND `status` IN ('Fishing', 'Done')
                 ORDER BY tanggal
                 ");
           } elseif (isset($_POST['reset'])) {
-            unset($_SESSION["hadir"]);
-          } elseif (isset($_SESSION["hadir"])) {
+            unset($_SESSION["awal"]);
+          } elseif (isset($_SESSION["awal"])) {
             $sql_produk = sql("SELECT * FROM orders 
-                INNER JOIN user ON orders.id_pelanggan=user.id_user WHERE tanggal='$_SESSION[hadir]'
+                INNER JOIN user ON orders.id_pelanggan=user.id_user WHERE tanggal='$_SESSION[awal]' AND `status` IN ('Fishing', 'Done')
                 ORDER BY tanggal
                 ");
           }
@@ -75,57 +75,21 @@ include "header.php";
                     <th>Nama Pelanggan</th>
                     <th>Tanggal Transaksi</th>
                     <th>Nomor Tiket</th>
-                    <th>Bukti Bayar</th>
-                    <th>Status</th>
+                    <th style="width: 65px;">Berat</th>
+                    <th style="width: 130px;">Durasi (Jam/Menit)</th>
+                    <th width=12% class="text-center">Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   <?php foreach ($sql_produk as $transaksi) : ?>
                     <tr>
                       <th class="text-center"><?= $no; ?></th>
-                      <th><?= $transaksi['nama_user']; ?></th>
-                      <th><?= $transaksi['tanggal']; ?></th>
-                      <th><?= $transaksi['no_tiket']; ?></th>
-                      <th>
-                        <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#lihatbuktiModal<?= $transaksi['id'] ?>">
-                          Lihat Bukti
-                        </button>
-
-                        <!-- Modal -->
-                        <div class="modal fade" id="lihatbuktiModal<?= $transaksi['id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                          <div class="modal-dialog">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Bukti Pembayaran</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                  <span aria-hidden="true">&times;</span>
-                                </button>
-                              </div>
-                              <div class="modal-body">
-                                <div class="card bg-dark text-white">
-                                  <img src="../<?= $transaksi['bukti_transfer']; ?>" class="card-img" alt="...">
-                                </div>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </th>
-                      <th class="text-center">
-                        <?php if ($transaksi['status'] == 'belum diproses') { ?>
-                          <a href="proses_transaksi.php?id=<?= $transaksi['id']; ?>" class="btn btn-info btn-sm" onclick="return confirm('Are you sure?')" style="margin-right: 10px;">
-                            <span class="text">Check In</span>
-                          </a>
-                          <a href="cancel_transaksi.php?id=<?= $transaksi['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">
-                            <span class="text">Cancel</span>
-                          </a>
-                        <?php } else { ?>
-                          <span><?= $transaksi['status']; ?></span>
-                        <?php } ?>
-                      </th>
+                      <th class="text-center"><?= $transaksi['nama_user']; ?></th>
+                      <th class="text-center"><?= $transaksi['tanggal']; ?></th>
+                      <th class="text-center"><?= $transaksi['no_tiket']; ?></th>
+                      <th class="text-center"><?= $transaksi['berat']; ?></th>
+                      <th class="text-center"><?= $transaksi['durasi']; ?></th>
+                      <th class="text-center"><?= $transaksi['status']; ?></th>
                     </tr>
                   <?php
                     $no++;
@@ -135,6 +99,8 @@ include "header.php";
             <?php else : ?>
               <p class="text-center">Tidak ada data untuk ditampilkan</p>
             <?php endif; ?>
+
+
           </div>
         </div>
       </div>
@@ -192,21 +158,52 @@ include "header.php";
       dom: 'Bfrtip',
       buttons: [{
           extend: 'excelHtml5',
-          title: 'Data Pelanggan',
+          title: 'Data Lomba',
           exportOptions: {
-            columns: [0, 1, 2, 3]
+            columns: [0, 1, 2, 3, 4, 5, 6]
           }
         },
         {
           extend: 'pdfHtml5',
-          title: 'Data Pelanggan',
+          title: 'Data Lomba',
           exportOptions: {
-            columns: [0, 1, 2, 3]
+            columns: [0, 1, 2, 3, 4, 5, 6]
           }
         }
       ]
     });
   });
+
+  // Menggunakan jQuery
+  $('#editBerat').on('show.bs.modal', function(event) {
+    var button = $(event.relatedTarget); // Tombol yang memicu modal
+    var id = button.data('id'); // Ambil data-id dari tombol
+    var berat = button.data('berat'); // Ambil data-berat dari tombol
+
+    var modal = $(this);
+    modal.find('#editId').val(id); // Set nilai input tersembunyi untuk ID
+    modal.find('#editBerat').val(berat); // Set nilai input untuk Berat
+  });
+
+  // Fungsi untuk pilih check box atau form
+  function toggleCheckbox(input) {
+    document.getElementById('inlineCheckbox1').checked = false;
+    if (input.value) {
+      document.getElementById('inlineCheckbox1').disabled = true;
+    } else {
+      document.getElementById('inlineCheckbox1').disabled = false;
+    }
+  }
+
+  function toggleInput(checkbox) {
+    const input = document.getElementById('durasiInput');
+    if (checkbox.checked) {
+      input.disabled = true;
+      input.value = '';
+    } else {
+      input.disabled = false;
+    }
+  }
 </script>
 </body>
 

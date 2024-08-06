@@ -1,7 +1,7 @@
 <?php
 session_start();
 require "../config.php";
-if (!isset($_SESSION["login_admin"])) {
+if (!isset($_SESSION["login_owner"])) {
   header("location:../login.php");
 }
 
@@ -69,76 +69,29 @@ include "header.php";
           }
           ?>
           <br>
-          <button type="button" class="btn btn-primary btn-sm mb-2" data-toggle="modal" data-target="#exampleModal">
-            Tambah Sewa
-          </button>
 
-          <!-- Modal Tambah Produk -->
-          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Tambah Produk</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <form action="" method="post">
-                    <label for="nama_penyewa">Nama Penyewa</label>
-                    <input type="text" name="nama_user" id="nama_penyewa" class="form-control mb-2" required placeholder="Masukkan Nama Penyewa">
-                    <label for="harga">Jenis Produk</label>
-                    <select class="form-select" aria-label="Default select example" name="id_produk">
-                      <option disabled>- Pilih Jenis Produk -</option>
-                      <?php foreach ($sql_produk as $produk) : ?>
-                        <option value="<?= $produk['id_produk']; ?>"><?= $produk['nama_produk']; ?></option>
-                      <?php endforeach ?>
-                    </select>
-                    <label for="harga">Jenis Produk</label>
-                    <input type="date" name="tanggal" class="form-control" id="tanggal" value="<?= $now; ?>">
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                  <button type="submit" name="simpan" class="btn btn-primary">Simpan Perubahan</button>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
           <div class="table-responsive">
             <?php if (isset($sql_sewa)) : ?>
               <table class="table table-bordered" id="myTable" width="100%" cellspacing="0">
                 <thead>
                   <tr>
-                    <th width=5%>No</th>
-                    <th>Nama Pelanggan</th>
-                    <th>Tanggal Transaksi</th>
-                    <th>Jenis Barang</th>
-                    <th>Harga</th>
-                    <th>Status</th>
+                    <th class="text-center" width=5%>No</th>
+                    <th class="text-center">Nama Pelanggan</th>
+                    <th class="text-center">Tanggal Transaksi</th>
+                    <th class="text-center">Jenis Barang</th>
+                    <th class="text-center">Harga</th>
+                    <th class="text-center">Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   <?php foreach ($sql_sewa as $transaksi) : ?>
                     <tr>
                       <th class="text-center"><?= $no; ?></th>
-                      <th><?= $transaksi['nama_user']; ?></th>
-                      <th><?= $transaksi['tanggal']; ?></th>
-                      <th><?= $transaksi['nama_produk']; ?></th>
-                      <th>Rp. <?= number_format($transaksi['harga']); ?></th>
-                      <th class="text-center">
-                        <?php if ($transaksi['status'] == 'Belum Diproses') { ?>
-                          <a href="proses_sewa.php?id=<?= $transaksi['id_sewa']; ?>" class="btn btn-info btn-sm" onclick="return confirm('Are you sure?')">
-                            <span class="text">Belum Diproses</span>
-                          </a>
-                        <?php } elseif ($transaksi['status'] == 'In Use') { ?>
-                          <a href="proses_sewa.php?id=<?= $transaksi['id_sewa']; ?>" class="btn btn-primary btn-sm" onclick="return confirm('Are you sure?')">
-                            <span class="text">In Use</span>
-                          </a>
-                        <?php } else { ?>
-                          <span><?= $transaksi['status']; ?></span>
-                        <?php } ?>
-                      </th>
+                      <th class="text-center"><?= $transaksi['nama_user']; ?></th>
+                      <th class="text-center"><?= $transaksi['tanggal']; ?></th>
+                      <th class="text-center"><?= $transaksi['nama_produk']; ?></th>
+                      <th class="text-center">Rp. <?= number_format($transaksi['harga']); ?></th>
+                      <th class="text-center"><?= $transaksi['status']; ?></th>
                     </tr>
                   <?php
                     $no++;
@@ -205,16 +158,16 @@ include "header.php";
       dom: 'Bfrtip',
       buttons: [{
           extend: 'excelHtml5',
-          title: 'Data Pelanggan',
+          title: 'Data Penyewaan Barang',
           exportOptions: {
-            columns: [0, 1, 2, 3]
+            columns: [0, 1, 2, 3, 4, 5]
           }
         },
         {
           extend: 'pdfHtml5',
-          title: 'Data Pelanggan',
+          title: 'Data Penyewaan Barang',
           exportOptions: {
-            columns: [0, 1, 2, 3]
+            columns: [0, 1, 2, 3, 4, 5]
           }
         }
       ]

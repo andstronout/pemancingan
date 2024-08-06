@@ -1,12 +1,14 @@
 <?php
 session_start();
 require "../config.php";
-if (!isset($_SESSION["login_admin"])) {
+if (!isset($_SESSION["login_owner"])) {
   header("location:../login.php");
 }
 
 $sql_user = sql("SELECT * FROM user WHERE `level`='1'");
 $no = 1;
+$sql_produk = sql("SELECT * FROM produk_jual");
+
 
 include "header.php";
 ?>
@@ -18,7 +20,7 @@ include "header.php";
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">Check In Lomba</h1>
+          <h1 class="m-0">Daftar Penjualan Barang</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
@@ -41,91 +43,51 @@ include "header.php";
         <div class="card-body">
           <form class="row g-3" action="" method="post">
             <div class="col-auto">
-              <label for="">Cari Tanggal</label>
-              <input type="date" class="form-control mb-2" name="t_hadir">
-              <button type="submit" class="btn btn-success btn-sm" name="simpan">Simpan</button>
-              <button type="submit" class="btn btn-outline-danger btn-sm" name="reset">Reset Tanggal</button>
+              <label for="">Dari Tanggal</label>
+              <input type="date" class="form-control" name="ts_awal" required>
+            </div>
+            <div class="col-auto">
+              <label for="">Ke Tanggal</label>
+              <input type="date" class="form-control" name="ts_akhir" required>
             </div>
             <div class="col-auto mt-4">
+              <button type="submit" class="btn btn-primary btn-sm" name="simpan_tanggal">Simpan</button>
+              <a href="daftar_sewa.php" class="btn btn-outline-success text-white btn-sm">Reset</a>
             </div>
           </form>
           <?php
-          if (isset($_POST['simpan']) && !empty($_POST['t_hadir'])) {
-            $_SESSION["hadir"] = $_POST["t_hadir"];
-            $sql_produk = sql("SELECT * FROM orders 
-                INNER JOIN user ON orders.id_pelanggan=user.id_user WHERE tanggal='$_SESSION[hadir]'
-                ORDER BY tanggal
-                ");
-          } elseif (isset($_POST['reset'])) {
-            unset($_SESSION["hadir"]);
-          } elseif (isset($_SESSION["hadir"])) {
-            $sql_produk = sql("SELECT * FROM orders 
-                INNER JOIN user ON orders.id_pelanggan=user.id_user WHERE tanggal='$_SESSION[hadir]'
-                ORDER BY tanggal
-                ");
+          if (isset($_POST['simpan_tanggal'])) {
+            $_SESSION["sawal"] = $_POST["ts_awal"];
+            $_SESSION["sakhir"] = $_POST["ts_akhir"];
+            $sql_jual = sql("SELECT * FROM jual INNER JOIN produk_jual ON jual.id_produk=produk_jual.   id_produk  WHERE jual.tanggal BETWEEN '$_SESSION[sawal]' AND '$_SESSION[sakhir]' ORDER BY jual.tanggal");
+          } else {
+            $sql_jual = sql("SELECT * FROM jual  INNER JOIN produk_jual ON jual.id_produk=produk_jual.   id_produk ORDER BY `jual`.`tanggal` DESC");
           }
           ?>
           <br>
+
           <div class="table-responsive">
-            <?php if (isset($sql_produk)) : ?>
+            <?php if (isset($sql_jual)) : ?>
               <table class="table table-bordered" id="myTable" width="100%" cellspacing="0">
                 <thead>
                   <tr>
                     <th width=5%>No</th>
                     <th>Nama Pelanggan</th>
                     <th>Tanggal Transaksi</th>
-                    <th>Nomor Tiket</th>
-                    <th>Bukti Bayar</th>
+                    <th>Jenis Barang</th>
+                    <th>Harga</th>
                     <th>Status</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <?php foreach ($sql_produk as $transaksi) : ?>
+                  <?php foreach ($sql_jual as $transaksi) : ?>
                     <tr>
                       <th class="text-center"><?= $no; ?></th>
                       <th><?= $transaksi['nama_user']; ?></th>
                       <th><?= $transaksi['tanggal']; ?></th>
-                      <th><?= $transaksi['no_tiket']; ?></th>
-                      <th>
-                        <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#lihatbuktiModal<?= $transaksi['id'] ?>">
-                          Lihat Bukti
-                        </button>
-
-                        <!-- Modal -->
-                        <div class="modal fade" id="lihatbuktiModal<?= $transaksi['id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                          <div class="modal-dialog">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Bukti Pembayaran</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                  <span aria-hidden="true">&times;</span>
-                                </button>
-                              </div>
-                              <div class="modal-body">
-                                <div class="card bg-dark text-white">
-                                  <img src="../<?= $transaksi['bukti_transfer']; ?>" class="card-img" alt="...">
-                                </div>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </th>
-                      <th class="text-center">
-                        <?php if ($transaksi['status'] == 'belum diproses') { ?>
-                          <a href="proses_transaksi.php?id=<?= $transaksi['id']; ?>" class="btn btn-info btn-sm" onclick="return confirm('Are you sure?')" style="margin-right: 10px;">
-                            <span class="text">Check In</span>
-                          </a>
-                          <a href="cancel_transaksi.php?id=<?= $transaksi['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">
-                            <span class="text">Cancel</span>
-                          </a>
-                        <?php } else { ?>
-                          <span><?= $transaksi['status']; ?></span>
-                        <?php } ?>
-                      </th>
+                      <th><?= $transaksi['nama_produk']; ?></th>
+                      <th>Rp. <?= number_format($transaksi['harga']); ?></th>
+                      <th class="text-center"><?= $transaksi['status']; ?></th>
                     </tr>
                   <?php
                     $no++;
@@ -192,16 +154,16 @@ include "header.php";
       dom: 'Bfrtip',
       buttons: [{
           extend: 'excelHtml5',
-          title: 'Data Pelanggan',
+          title: 'Data Penjualan Barang',
           exportOptions: {
-            columns: [0, 1, 2, 3]
+            columns: [0, 1, 2, 3, 4, 5]
           }
         },
         {
           extend: 'pdfHtml5',
-          title: 'Data Pelanggan',
+          title: 'Data Penjualan Barang',
           exportOptions: {
-            columns: [0, 1, 2, 3]
+            columns: [0, 1, 2, 3, 4, 5]
           }
         }
       ]
