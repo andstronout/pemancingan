@@ -52,38 +52,12 @@ include "header.php";
           <?php
           if (isset($_POST['simpan_tanggal'])) {
             $_SESSION["sawal"] = $_POST["ts_awal"];
-            $sql_pemenang = sql("SELECT pemenang.*, 
-          user1.nama_user AS nama_juara1, 
-          user2.nama_user AS nama_juara2, 
-          user3.nama_user AS nama_juara3,
-          pemenang.berat1, 
-          pemenang.durasi1, 
-          pemenang.berat2, 
-          pemenang.durasi2, 
-          pemenang.berat3, 
-          pemenang.durasi3
-    FROM pemenang
-    INNER JOIN user AS user1 ON pemenang.juara1 = user1.id_user
-    INNER JOIN user AS user2 ON pemenang.juara2 = user2.id_user
-    INNER JOIN user AS user3 ON pemenang.juara3 = user3.id_user
+            $sql_pemenang = sql("SELECT * FROM pemenang INNER JOIN user ON pemenang.id_user=user.id_user
     WHERE pemenang.tanggal_lomba ='$_SESSION[sawal]' 
     ORDER BY pemenang.tanggal_lomba;
     ");
           } else {
-            $sql_pemenang = sql("SELECT pemenang.*, 
-          user1.nama_user AS nama_juara1, 
-          user2.nama_user AS nama_juara2, 
-          user3.nama_user AS nama_juara3,
-          pemenang.berat1, 
-          pemenang.durasi1, 
-          pemenang.berat2, 
-          pemenang.durasi2, 
-          pemenang.berat3, 
-          pemenang.durasi3
-    FROM pemenang
-    INNER JOIN user AS user1 ON pemenang.juara1 = user1.id_user
-    INNER JOIN user AS user2 ON pemenang.juara2 = user2.id_user
-    INNER JOIN user AS user3 ON pemenang.juara3 = user3.id_user 
+            $sql_pemenang = sql("SELECT * FROM pemenang INNER JOIN user ON pemenang.id_user=user.id_user
     ORDER BY `pemenang`.`tanggal_lomba` DESC");
           }
           ?>
@@ -97,19 +71,21 @@ include "header.php";
                   <tr>
                     <th class="text-center" width=5%>No</th>
                     <th>Tanggal</th>
-                    <th>Juara 1</th>
-                    <th>Juara 2</th>
-                    <th>Juara 3</th>
+                    <th>Nama Pemenang</th>
+                    <th>Juara </th>
+                    <th>Berat</th>
+                    <th>Durasi</th>
                   </tr>
                 </thead>
                 <tbody>
                   <?php foreach ($sql_pemenang as $row) : ?>
                     <tr>
                       <th class="text-center"><?= $no; ?></th>
-                      <td><?= htmlspecialchars($row['tanggal_lomba']); ?></td>
-                      <td><?= htmlspecialchars($row['nama_juara1']) . "( " . $row['berat1'] . "kg / " . $row['durasi1'] . " menit )"; ?></td>
-                      <td><?= htmlspecialchars($row['nama_juara2']) . "( " . $row['berat2'] . "kg / " . $row['durasi2'] . " menit )"; ?></td>
-                      <td><?= htmlspecialchars($row['nama_juara3']) . "( " . $row['berat3'] . "kg / " . $row['durasi3'] . " menit )"; ?></td>
+                      <td><?= $row['tanggal_lomba']; ?></td>
+                      <td><?= $row['nama_user']; ?></td>
+                      <td><?= $row['juara']; ?></td>
+                      <td><?= $row['berat']; ?></td>
+                      <td><?= $row['durasi']; ?></td>
                     </tr>
                   <?php
                     $no++;

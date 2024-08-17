@@ -56,7 +56,7 @@
             <li class="has-children">
               <a href="#">Hello <?= $user['nama_user']; ?></a>
               <ul class="dropdown">
-                <li><a href="#">Pesanan Saya</a></li>
+                <li><a href="riwayat_lomba.php">Riwayat Lomba</a></li>
                 <li><a href="ubahpassword.php">Ubah Password</a></li>
                 <li><a href="logout.php">Logout</a></li>
               </ul>
