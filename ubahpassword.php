@@ -81,7 +81,7 @@ if (!isset($_SESSION['login_pelanggan'])) {
               <input type="password" class="form-control" id="password" name="ulang_password" placeholder="Masukan Password">
             </div>
 
-            <button type="submit" name="submit" class="btn btn-primary">Send Message</button>
+            <button type="submit" name="submit" class="btn btn-primary">Submit</button>
           </form>
         </div>
       </div>

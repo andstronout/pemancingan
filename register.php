@@ -87,7 +87,7 @@ if (isset($_SESSION['login_pelanggan'])) {
             </div>
 
 
-            <button type="submit" name="submit" class="btn btn-primary">Send Message</button>
+            <button type="submit" name="submit" class="btn btn-primary">Register</button>
           </form>
           <p>Sudah punya akun ? <a href="login.php" class="text-secondary">Login Sekarang</a></p>
         </div>
