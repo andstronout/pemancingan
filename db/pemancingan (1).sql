@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 01, 2024 at 05:52 AM
+-- Generation Time: Aug 19, 2024 at 05:33 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -60,7 +60,7 @@ CREATE TABLE `jual` (
   `id_jual` int NOT NULL,
   `id_produk` int NOT NULL,
   `tanggal` date NOT NULL,
-  `id_user` int NOT NULL,
+  `nama_user` varchar(50) NOT NULL,
   `status` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -68,8 +68,10 @@ CREATE TABLE `jual` (
 -- Dumping data for table `jual`
 --
 
-INSERT INTO `jual` (`id_jual`, `id_produk`, `tanggal`, `id_user`, `status`) VALUES
-(1, 1, '2024-07-30', 6, 'Belum Diproses');
+INSERT INTO `jual` (`id_jual`, `id_produk`, `tanggal`, `nama_user`, `status`) VALUES
+(1, 1, '2024-07-30', 'Rahmat', 'Done'),
+(2, 4, '2024-08-04', 'Azis', 'Done'),
+(3, 9, '2024-08-05', 'Azis', 'Done');
 
 -- --------------------------------------------------------
 
@@ -93,31 +95,31 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `id_pelanggan`, `tanggal`, `no_tiket`, `berat`, `durasi`, `bukti_transfer`, `status`) VALUES
-(1, '2', '2024-07-27', '1', 3.00, NULL, 'images/bukti_bayar/Bukti transfer.jpeg', 'Cancel'),
-(2, '2', '2024-07-27', '2', 5.00, NULL, 'images/bukti_bayar/Bukti transfer.jpeg', 'Fishing'),
-(3, '3', '2024-07-17', '1', NULL, NULL, 'images/bukti_bayar/Bukti transfer.jpeg', 'Fishing'),
-(4, '3', '2024-07-30', '1', 5.40, 2.56, 'images/bukti_bayar/Bukti transfer.jpeg', 'Fishing'),
-(5, '4', '2024-07-30', '2', 5.43, 4.34, 'images/bukti_bayar/Bukti transfer.jpeg', 'Fishing'),
-(6, '5', '2024-07-30', '3', 5.43, 4.67, 'images/bukti_bayar/Bukti transfer.jpeg', 'Fishing'),
-(7, '6', '2024-07-30', '4', 5.00, 5.00, 'images/bukti_bayar/Bukti transfer.jpeg', 'Fishing'),
-(8, '7', '2024-07-30', '5', 6.32, 5.00, 'images/bukti_bayar/Bukti transfer.jpeg', 'Fishing'),
-(9, '8', '2024-07-30', '6', 3.00, 5.00, 'images/bukti_bayar/Bukti transfer.jpeg', 'Fishing'),
-(10, '9', '2024-07-30', '7', 2.01, 5.00, 'images/bukti_bayar/Bukti transfer.jpeg', 'Fishing'),
-(11, '10', '2024-07-30', '8', 4.32, 5.00, 'images/bukti_bayar/Bukti transfer.jpeg', 'Fishing'),
-(12, '11', '2024-07-30', '9', 2.56, 5.00, 'images/bukti_bayar/Bukti transfer.jpeg', 'Fishing'),
-(13, '12', '2024-07-30', '10', 4.90, 5.00, 'images/bukti_bayar/Bukti transfer.jpeg', 'Fishing'),
-(14, '13', '2024-07-30', '11', 3.30, 5.00, 'images/bukti_bayar/Bukti transfer.jpeg', 'Fishing'),
-(15, '3', '2024-07-31', '1', 5.40, 2.56, 'images/bukti_transferBukti transfer.jpeg', 'Fishing'),
-(16, '4', '2024-07-31', '2', 5.43, 4.34, 'images/bukti_transferBukti transfer.jpeg', 'Fishing'),
-(17, '5', '2024-07-31', '3', 5.43, 4.67, 'images/bukti_transferBukti transfer.jpeg', 'Fishing'),
-(18, '6', '2024-07-31', '4', 5.00, 5.00, 'images/bukti_transferBukti transfer.jpeg', 'Fishing'),
-(19, '7', '2024-07-31', '5', 4.43, 5.00, 'images/bukti_transferBukti transfer.jpeg', 'Fishing'),
-(20, '8', '2024-07-31', '6', 5.00, 5.00, 'images/bukti_transferBukti transfer.jpeg', 'Fishing'),
-(21, '9', '2024-07-31', '7', 5.00, 5.00, 'images/bukti_transferBukti transfer.jpeg', 'Fishing'),
-(22, '10', '2024-07-31', '8', 6.00, 5.00, 'images/bukti_transferBukti transfer.jpeg', 'Fishing'),
-(23, '11', '2024-07-31', '9', 1.00, 5.00, 'images/bukti_transferBukti transfer.jpeg', 'Fishing'),
-(24, '12', '2024-07-31', '10', 5.86, 5.00, 'images/bukti_transferBukti transfer.jpeg', 'Fishing'),
-(25, '13', '2024-07-31', '11', NULL, NULL, 'images/bukti_transferBukti transfer.jpeg', 'Cancel');
+(1, '2', '2024-07-27', '1', 3.00, NULL, 'Bukti transfer.jpeg', 'Cancel'),
+(2, '2', '2024-07-27', '2', 5.00, NULL, 'Bukti transfer.jpeg', 'Fishing'),
+(3, '3', '2024-07-17', '1', NULL, NULL, 'Bukti transfer.jpeg', 'Fishing'),
+(4, '3', '2024-07-30', '1', 5.40, 2.56, 'Bukti transfer.jpeg', 'Fishing'),
+(5, '4', '2024-07-30', '2', 5.43, 4.34, 'Bukti transfer.jpeg', 'Fishing'),
+(6, '5', '2024-07-30', '3', 5.43, 4.67, 'Bukti transfer.jpeg', 'Fishing'),
+(7, '6', '2024-07-30', '4', 5.00, 5.00, 'Bukti transfer.jpeg', 'Done'),
+(8, '7', '2024-07-30', '5', 6.32, 5.00, 'Bukti transfer.jpeg', 'Done'),
+(9, '8', '2024-07-30', '6', 3.00, 5.00, 'Bukti transfer.jpeg', 'Fishing'),
+(10, '9', '2024-07-30', '7', 2.01, 5.00, 'Bukti transfer.jpeg', 'Fishing'),
+(11, '10', '2024-07-30', '8', 4.32, 5.00, 'Bukti transfer.jpeg', 'Fishing'),
+(12, '11', '2024-07-30', '9', 2.56, 5.00, 'Bukti transfer.jpeg', 'Fishing'),
+(13, '12', '2024-07-30', '10', 4.90, 5.00, 'Bukti transfer.jpeg', 'Fishing'),
+(14, '13', '2024-07-30', '11', 3.30, 5.00, 'Bukti transfer.jpeg', 'Fishing'),
+(15, '3', '2024-07-31', '1', 5.40, 2.56, 'Bukti transfer.jpeg', 'Done'),
+(16, '4', '2024-07-31', '2', 5.43, 4.34, 'Bukti transfer.jpeg', 'Done'),
+(17, '5', '2024-07-31', '3', 5.43, 4.67, 'Bukti transfer.jpeg', 'Done'),
+(18, '6', '2024-07-31', '4', 5.00, 5.00, 'Bukti transfer.jpeg', 'Done'),
+(19, '7', '2024-07-31', '5', 4.43, 5.00, 'Bukti transfer.jpeg', 'Done'),
+(20, '8', '2024-07-31', '6', 5.00, 5.00, 'Bukti transfer.jpeg', 'Done'),
+(21, '9', '2024-07-31', '7', 5.00, 5.00, 'Bukti transfer.jpeg', ''),
+(22, '10', '2024-07-31', '8', 6.00, 5.00, 'Bukti transfer.jpeg', 'Done'),
+(23, '11', '2024-07-31', '9', 1.00, 5.00, 'Bukti transfer.jpeg', 'Done'),
+(24, '12', '2024-07-31', '10', 5.86, 5.00, 'Bukti transfer.jpeg', 'Done'),
+(25, '13', '2024-07-31', '11', NULL, NULL, 'Bukti transfer.jpeg', 'Cancel');
 
 -- --------------------------------------------------------
 
@@ -128,24 +130,23 @@ INSERT INTO `orders` (`id`, `id_pelanggan`, `tanggal`, `no_tiket`, `berat`, `dur
 CREATE TABLE `pemenang` (
   `id_lomba` int NOT NULL,
   `tanggal_lomba` date NOT NULL,
-  `juara1` int NOT NULL,
-  `berat1` decimal(10,2) NOT NULL,
-  `durasi1` decimal(10,2) NOT NULL,
-  `juara2` int NOT NULL,
-  `berat2` decimal(10,2) NOT NULL,
-  `durasi2` decimal(10,2) NOT NULL,
-  `juara3` int NOT NULL,
-  `berat3` decimal(10,2) NOT NULL,
-  `durasi3` decimal(10,2) NOT NULL
+  `id_user` int NOT NULL,
+  `juara` int NOT NULL,
+  `berat` decimal(10,2) NOT NULL,
+  `durasi` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `pemenang`
 --
 
-INSERT INTO `pemenang` (`id_lomba`, `tanggal_lomba`, `juara1`, `berat1`, `durasi1`, `juara2`, `berat2`, `durasi2`, `juara3`, `berat3`, `durasi3`) VALUES
-(2, '2024-07-30', 7, 6.32, 5.00, 4, 5.43, 4.34, 5, 5.43, 4.67),
-(3, '2024-07-31', 10, 6.00, 5.00, 12, 5.86, 5.00, 4, 5.43, 4.34);
+INSERT INTO `pemenang` (`id_lomba`, `tanggal_lomba`, `id_user`, `juara`, `berat`, `durasi`) VALUES
+(4, '2024-07-31', 6, 1, 5.00, 3.60),
+(5, '2024-07-31', 3, 2, 4.00, 5.00),
+(6, '2024-07-31', 7, 3, 3.00, 5.00),
+(8, '2024-07-30', 4, 1, 5.43, 4.34),
+(9, '2024-07-30', 5, 2, 5.43, 4.67),
+(10, '2024-07-30', 3, 3, 5.40, 2.56);
 
 -- --------------------------------------------------------
 
@@ -165,8 +166,10 @@ CREATE TABLE `produk_jual` (
 
 INSERT INTO `produk_jual` (`id_produk`, `nama_produk`, `harga`) VALUES
 (1, 'Pelet Cacing', 10000),
-(2, 'Pelet Susu', 15000),
-(3, 'Pelet Atom', 20000);
+(2, 'Pelet Susu', 20000),
+(3, 'Pelet Atom', 20000),
+(4, 'Essence Premium', 45000),
+(9, 'Kopi Hitam', 5000);
 
 -- --------------------------------------------------------
 
@@ -185,8 +188,9 @@ CREATE TABLE `produk_sewa` (
 --
 
 INSERT INTO `produk_sewa` (`id_produk`, `nama_produk`, `harga`) VALUES
-(1, 'Joran Pancing Standar', 40000),
-(2, 'Joran Pancing Premium', 75000);
+(1, 'Joran Pancing Standar', 50000),
+(3, 'Joran Pancing Premium', 75000),
+(5, 'Bangku Santai', 50000);
 
 -- --------------------------------------------------------
 
@@ -198,7 +202,7 @@ CREATE TABLE `sewa` (
   `id_sewa` int NOT NULL,
   `id_produk` int NOT NULL,
   `tanggal` date NOT NULL,
-  `id_user` int NOT NULL,
+  `nama_user` varchar(50) NOT NULL,
   `status` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -206,8 +210,11 @@ CREATE TABLE `sewa` (
 -- Dumping data for table `sewa`
 --
 
-INSERT INTO `sewa` (`id_sewa`, `id_produk`, `tanggal`, `id_user`, `status`) VALUES
-(5, 1, '2024-07-30', 6, 'Belum Diproses');
+INSERT INTO `sewa` (`id_sewa`, `id_produk`, `tanggal`, `nama_user`, `status`) VALUES
+(5, 1, '2024-07-30', 'Candra', 'Done'),
+(6, 3, '2024-08-02', 'Andri Hidayat', 'Done'),
+(7, 1, '2024-08-04', 'Azis', 'Done'),
+(8, 5, '2024-08-05', 'Azis', 'Done');
 
 -- --------------------------------------------------------
 
@@ -241,7 +248,8 @@ INSERT INTO `user` (`id_user`, `nama_user`, `email`, `nomor_hp`, `password`, `le
 (10, 'Gita', 'gita@asd.com', '081234567896', '7815696ecbf1c96e6894b779456d330e', 1),
 (11, 'Hadi', 'hadi@asd.com', '081234567897', '7815696ecbf1c96e6894b779456d330e', 1),
 (12, 'Indah', 'indah@asd.com', '081234567898', '7815696ecbf1c96e6894b779456d330e', 1),
-(13, 'Joko', 'joko@asd.com', '081234567899', '7815696ecbf1c96e6894b779456d330e', 1);
+(13, 'Joko', 'joko@asd.com', '081234567899', '7815696ecbf1c96e6894b779456d330e', 1),
+(14, 'Owner', 'owner@pancing.com', '0', '7815696ecbf1c96e6894b779456d330e', 3);
 
 --
 -- Indexes for dumped tables
@@ -309,7 +317,7 @@ ALTER TABLE `bookings`
 -- AUTO_INCREMENT for table `jual`
 --
 ALTER TABLE `jual`
-  MODIFY `id_jual` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_jual` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `orders`
@@ -321,31 +329,31 @@ ALTER TABLE `orders`
 -- AUTO_INCREMENT for table `pemenang`
 --
 ALTER TABLE `pemenang`
-  MODIFY `id_lomba` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_lomba` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `produk_jual`
 --
 ALTER TABLE `produk_jual`
-  MODIFY `id_produk` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_produk` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `produk_sewa`
 --
 ALTER TABLE `produk_sewa`
-  MODIFY `id_produk` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_produk` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `sewa`
 --
 ALTER TABLE `sewa`
-  MODIFY `id_sewa` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_sewa` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id_user` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
