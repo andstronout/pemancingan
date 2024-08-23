@@ -116,7 +116,7 @@
               <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-book"></i>
                 <p>
-                  Kelola Penjualan
+                  Kelola Transaksi
                   <i class="fas fa-angle-left right"></i>
                 </p>
               </a>
@@ -130,7 +130,7 @@
                 <li class="nav-item">
                   <a href="daftar_jual.php" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Kelola Penjualan</p>
+                    <p>Kelola Transaksi Penjualan</p>
                   </a>
                 </li>
               </ul>
