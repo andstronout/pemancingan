@@ -140,7 +140,7 @@ include "header.php";
                         <?php if (!empty($transaksi['durasi'])) { ?>
                           <?= $transaksi['durasi']; ?>
                         <?php } else { ?>
-                          <input type="number" name="durasi" id="durasiInput" step="0.01" style="width: 40%; margin-right:7px;" oninput="toggleCheckbox(this)">
+                          <input type="number" name="durasi" id="durasiInput" step="0.01" style="width: 40%; margin-right:7px;" oninput="toggleCheckbox(this)" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                           <div class="form-check form-check-inline">
                             <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="5" onchange="toggleInput(this)" name="durasi">
                             <label class="form-check-label" for="inlineCheckbox1">5 Jam</label>
@@ -155,30 +155,44 @@ include "header.php";
                           echo $transaksi['status']; ?>
                         <?php } else { ?>
                           <!-- Button trigger modal -->
-                          <button type="button" class="btn btn-sm btn-outline-info" data-toggle="modal" data-target="#editBerat" data-id="<?= $transaksi['id']; ?>" data-berat="<?= $transaksi['berat']; ?>">
-                            Edit
+                          <button type="button" class="btn btn-sm btn-outline-info"
+                            data-toggle="modal"
+                            data-target="#editBerat"
+                            data-id="<?= $transaksi['id']; ?>"
+                            data-berat="<?= $transaksi['berat']; ?>"
+                            data-durasi="<?= $transaksi['durasi']; ?>">Edit
                           </button>
                           <a href="selesai_lomba.php?id=<?= $transaksi['id']; ?>" class="btn btn-primary btn-sm" onclick="return confirm('Are you sure?')">
                             <span class="text">Done</span>
                           </a>
 
                           <!-- Bikin SQL untuk cari berat -->
-                          <!-- Modal Edit Berat -->
+                          <!-- Modal Edit Berat dan Durasi -->
+                          <!-- Modal Edit Berat dan Durasi -->
                           <div class="modal fade" id="editBerat" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                               <div class="modal-content">
                                 <div class="modal-header">
-                                  <h5 class="modal-title" id="exampleModalLabel">Edit Berat</h5>
+                                  <h5 class="modal-title" id="exampleModalLabel">Edit Berat dan Durasi</h5>
                                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                   </button>
                                 </div>
                                 <div class="modal-body">
-                                  Masukan Berat
+                                  <!-- Form untuk Edit Berat dan Durasi -->
                                   <form action="proses_pemenang.php" method="post">
-                                    <!-- Tambahkan input tersembunyi untuk ID -->
+                                    <!-- Input untuk ID -->
                                     <input type="hidden" id="editId" name="id">
-                                    <input type="number" id="editBerat" class="form-control" name="berat" required step="0.01">
+
+                                    <!-- Input untuk Berat -->
+                                    <label for="editBerat">Masukkan Berat (Kg)</label>
+                                    <input type="number" id="editBerat" class="form-control mb-3" name="berat" required step="0.01" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+
+                                    <!-- Input untuk Durasi -->
+                                    <label for="editDurasi">Masukkan Durasi (Jam/Menit)</label>
+                                    <input type="number" name="durasi" id="durasiInput" step="0.01" class="form-control mb-3" oninput="toggleCheckbox(this)" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="5" onchange="toggleInput(this)" name="durasi">
+                                    <label class="form-check-label" for="inlineCheckbox1">5 Jam</label>
                                 </div>
                                 <div class="modal-footer">
                                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -188,7 +202,10 @@ include "header.php";
                               </div>
                             </div>
                           </div>
-                          <!-- End Modal Edit Berat -->
+                          <!-- End Modal Edit Berat dan Durasi -->
+
+                          <!-- End Modal Edit Berat dan Durasi -->
+
                         <?php } ?>
                       </td>
                     </tr>
@@ -280,13 +297,25 @@ include "header.php";
     var button = $(event.relatedTarget); // Tombol yang memicu modal
     var id = button.data('id'); // Ambil data-id dari tombol
     var berat = button.data('berat'); // Ambil data-berat dari tombol
+    var durasi = button.data('durasi'); // Ambil data-durasi dari tombol
 
     var modal = $(this);
     modal.find('#editId').val(id); // Set nilai input tersembunyi untuk ID
     modal.find('#editBerat').val(berat); // Set nilai input untuk Berat
+
+    // Jika durasi adalah 5, centang checkbox "5 Jam", jika tidak, isi input durasi
+    if (durasi == 5) {
+      modal.find('#inlineCheckbox1').prop('checked', true);
+      modal.find('#durasiInput').val(''); // Kosongkan input durasi
+      modal.find('#durasiInput').prop('disabled', true); // Nonaktifkan input durasi
+    } else {
+      modal.find('#durasiInput').val(durasi); // Set nilai input untuk Durasi
+      modal.find('#inlineCheckbox1').prop('checked', false); // Uncheck checkbox
+      modal.find('#durasiInput').prop('disabled', false); // Aktifkan input durasi
+    }
   });
 
-  // Fungsi untuk pilih check box atau form
+  // Fungsi untuk toggle antara checkbox dan input number
   function toggleCheckbox(input) {
     document.getElementById('inlineCheckbox1').checked = false;
     if (input.value) {

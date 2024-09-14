@@ -130,7 +130,7 @@
                 <li class="nav-item">
                   <a href="daftar_jual.php" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Kelola Transaksi Penjualan</p>
+                    <p>Kelola Penjualan</p>
                   </a>
                 </li>
               </ul>

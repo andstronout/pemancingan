@@ -3,24 +3,48 @@ session_start();
 require "config.php";
 
 if (isset($_POST['submit'])) {
+	// Set timezone ke Asia/Jakarta (WIB)
+	date_default_timezone_set('Asia/Jakarta');
+
 	if (!isset($_SESSION["login_pelanggan"])) {
 		header("location:login.php");
 	} else {
-		$tanggal = $_POST['tanggal'];
-		$tanggal_sekarang = date("Y-m-d");
+		$tanggal = $_POST['tanggal']; // Input dari form, misalnya: "2024-09-14"
+		$tanggal_sekarang = date("Y-m-d H:i:s"); // Mengambil tanggal dan waktu sekarang
+		$tanggal_hari_ini = date("Y-m-d"); // Mengambil tanggal hari ini
+		$tanggal_batas = $tanggal_hari_ini . " 20:00:00"; // Batas booking hari ini jam 20:00 WIB
 
-		if ($tanggal < $tanggal_sekarang) {
+		// Cek apakah tanggal yang dipilih adalah hari ini dan waktu sekarang sudah melewati batas jam 20:00 WIB
+		if ($tanggal == $tanggal_hari_ini && strtotime($tanggal_sekarang) > strtotime($tanggal_batas)) {
 			echo "<script>
-			alert('Tanggal sudah lewat, silahkan pilih tanggal lain!');
-			window.location.href='index.php';
-			</script>";
+					alert('Sudah lebih dari jam 20:00 WIB untuk hari ini, silakan pilih tanggal besok atau tanggal lain!');
+					window.location.href='index.php';
+					</script>";
 			exit;
 		}
+
+		// Cek apakah tanggal yang dipilih adalah tanggal di masa lalu
+		if (strtotime($tanggal) < strtotime($tanggal_hari_ini)) {
+			echo "<script>
+					alert('Tidak bisa memesan tiket untuk tanggal yang sudah lewat. Silakan pilih tanggal hari ini atau yang akan datang!');
+					window.location.href='index.php';
+					</script>";
+			exit;
+		}
+
 		$userId = $_SESSION['id_pelanggan']; // Asumsikan id_pelanggan disimpan di session saat login
-		$jumlah_pemancing = booking($tanggal);
-		$user = getUserData($userId);
+		$jumlah_pemancing = booking($tanggal); // Fungsi booking untuk memproses pemesanan
+		$user = getUserData($userId); // Mengambil data user
+
+		// Scroll ke bagian 'service' setelah pemesanan sukses
+		echo "<script>
+			window.location.hash = '#service';
+			</script>";
 	}
 }
+
+
+
 
 if (isset($_POST['pesan_tiket'])) {
 	$userId = $_SESSION['id_pelanggan'];
@@ -30,7 +54,7 @@ if (isset($_POST['pesan_tiket'])) {
 	$target_file = $target_dir . basename($bukti_transfer);
 
 	if (move_uploaded_file($_FILES['bukti_transfer']['tmp_name'], $target_file)) {
-		saveOrder($userId, $tanggal, $target_file);
+		saveOrder($userId, $tanggal, $bukti_transfer);
 		$jumlah_pemancing = booking($tanggal); // Mengupdate jumlah pemancing setelah pemesanan
 		echo "<script>
 		alert('Pesanan Anda Berhasil!');
@@ -58,7 +82,7 @@ include "header.php";
 								<div class="row mb-4">
 									<div class="col-sm-12 col-md-6 mb-3 mb-lg-0 col-lg-6">
 										<label for="">Cari Tanggal</label>
-										<input type="date" class="form-control" name="tanggal">
+										<input type="date" class="form-control" name="tanggal" required>
 									</div>
 								</div>
 								<div class="row align-items-center">
@@ -85,7 +109,7 @@ include "header.php";
 		header("location:login.php");
 	} elseif ($jumlah_pemancing == 25) { ?>
 		<div class="untree_co-section">
-			<div class="container">
+			<div class="container" id="service">
 				<div class="row mb-5 justify-content-center">
 					<div class="col-lg-6 text-center">
 						<h2 class="section-title text-center mb-3">Our Services</h2>
@@ -99,7 +123,7 @@ include "header.php";
 	<?php } else {
 	?>
 		<div class="untree_co-section">
-			<div class="container">
+			<div class="container" id="service">
 				<div class="row mb-5 justify-content-center">
 					<div class="col-lg-6 text-center">
 						<h2 class="section-title text-center mb-3">Our Services</h2>

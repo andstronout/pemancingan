@@ -79,7 +79,7 @@ if (isset($_SESSION['login_pelanggan'])) {
             </div>
             <div class="form-group">
               <label class="text-black" for="nomor_hp">Nomor Handphone</label>
-              <input type="text" class="form-control" id="nomor_hp" name="nomor_hp" placeholder="Masukan Nomor Handphone">
+              <input type="text" class="form-control" id="nomor_hp" name="nomor_hp" placeholder="Masukan Nomor Handphone" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
             </div>
             <div class="form-group">
               <label class="text-black" for="password">Password</label>
