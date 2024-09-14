@@ -54,7 +54,7 @@ include "header.php";
             <div class="col-auto">
               <label for="">Cari Tanggal</label>
               <input type="date" class="form-control mb-2" name="t_awal">
-              <button type="submit" class="btn btn-success btn-sm" name="simpan">Simpan</button>
+              <button type="submit" class="btn btn-success btn-sm" name="simpan">Cari</button>
               <button type="submit" class="btn btn-outline-danger btn-sm" name="reset">Reset Tanggal</button>
             </div>
             <div class="col-auto mt-4">
@@ -99,7 +99,7 @@ include "header.php";
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="submit" name="cari" class="btn btn-primary">Save changes</button>
+                  <button type="submit" name="cari" class="btn btn-primary">Cari</button>
                   </form>
                 </div>
               </div>
@@ -133,7 +133,7 @@ include "header.php";
                           <?php if (!empty($transaksi['berat'])) { ?>
                             <?= $transaksi['berat']; ?> Kg
                           <?php } else { ?>
-                            <input type="number" name="berat" step="0.01" style="width: 70%;"> Kg
+                            <input type="number" name="berat" step="0.01" style="width: 70%;" oninput="toggleCheckbox(this)" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"> Kg
                           <?php } ?>
                       </td>
                       <td class="text-center">
@@ -196,7 +196,7 @@ include "header.php";
                                 </div>
                                 <div class="modal-footer">
                                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                  <button type="submit" name="ubahBerat" class="btn btn-primary">Save changes</button>
+                                  <button type="submit" name="ubahBerat" class="btn btn-primary">Submit</button>
                                   </form>
                                 </div>
                               </div>
@@ -275,20 +275,22 @@ include "header.php";
     $('#myTable').DataTable({
       dom: 'Bfrtip',
       buttons: [{
-          extend: 'excelHtml5',
-          title: 'Data Pelanggan',
-          exportOptions: {
-            columns: [0, 1, 2, 3]
-          }
+        extend: 'pdfHtml5',
+        text: 'Cetak Form', // Ubah teks tombol di sini
+        className: 'btn btn-warning',
+        title: 'Form Pemancingan <?= $_SESSION["awal"]; ?>',
+        exportOptions: {
+          columns: [0, 1, 2, 3, 4, 5]
         },
-        {
-          extend: 'pdfHtml5',
-          title: 'Data Pelanggan',
-          exportOptions: {
-            columns: [0, 1, 2, 3]
+        customize: function(doc) {
+          // Loop through the table body content
+          for (var i = 1; i < doc.content[1].table.body.length; i++) {
+            // Kosongkan kolom 4 dan 5
+            doc.content[1].table.body[i][4].text = '';
+            doc.content[1].table.body[i][5].text = '';
           }
         }
-      ]
+      }]
     });
   });
 

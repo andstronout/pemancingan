@@ -407,10 +407,11 @@ function savedaftarSewa()
 {
   $id_produk = $_POST["id_produk"];
   $tanggal = $_POST["tanggal"];
+  $no_tiket = $_POST["no_tiket"];
   $nama_user = $_POST["nama_user"];
   $conn = koneksi();
   if (isset($_POST["simpan"])) {
-    $stmt = $conn->prepare("INSERT INTO sewa (id_produk, tanggal, nama_user, `status`) VALUES ('$id_produk','$tanggal', '$nama_user', 'Belum Diproses' )");
+    $stmt = $conn->prepare("INSERT INTO sewa (id_produk, tanggal, no_tiket, nama_user, `status`) VALUES ('$id_produk','$tanggal', '$no_tiket', '$nama_user', 'Belum Diproses' )");
 
     if ($stmt->execute()) {
       echo "<script>
@@ -478,10 +479,11 @@ function savedaftarJual()
 {
   $id_produk = $_POST["id_produk"];
   $tanggal = $_POST["tanggal"];
+  $no_tiket = $_POST["no_tiket"];
   $nama_user = $_POST["nama_user"];
   $conn = koneksi();
   if (isset($_POST["simpan"])) {
-    $stmt = $conn->prepare("INSERT INTO jual (id_produk, tanggal, nama_user, `status`) VALUES ('$id_produk','$tanggal', '$nama_user', 'Belum Diproses' )");
+    $stmt = $conn->prepare("INSERT INTO jual (id_produk, tanggal, no_tiket, nama_user, `status`) VALUES ('$id_produk','$tanggal', '$no_tiket', '$nama_user', 'Belum Diproses' )");
 
     if ($stmt->execute()) {
       echo "<script>

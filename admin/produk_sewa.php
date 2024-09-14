@@ -136,7 +136,7 @@ include "header.php";
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-        <button type="submit" name="edit" class="btn btn-primary">Simpan Perubahan</button>
+        <button type="submit" name="edit" class="btn btn-primary">Simpan</button>
         </form>
       </div>
     </div>

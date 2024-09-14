@@ -55,7 +55,7 @@ include "header.php";
               <input type="date" class="form-control" name="ts_akhir" required>
             </div>
             <div class="col-auto mt-4">
-              <button type="submit" class="btn btn-primary btn-sm" name="simpan_tanggal">Simpan</button>
+              <button type="submit" class="btn btn-primary btn-sm" name="simpan_tanggal">Cari</button>
               <a href="daftar_sewa.php" class="btn btn-outline-success text-white btn-sm">Reset</a>
             </div>
           </form>
@@ -94,12 +94,14 @@ include "header.php";
                         <option value="<?= $produk['id_produk']; ?>"><?= $produk['nama_produk']; ?></option>
                       <?php endforeach ?>
                     </select>
-                    <label for="harga">Jenis Produk</label>
+                    <label for="harga">Tanggal Beli</label>
                     <input type="date" name="tanggal" class="form-control" id="tanggal" value="<?= $now; ?>">
+                    <label for="no_tiket">Nomor Bangku</label>
+                    <input type="text" name="no_tiket" id="no_tiket" class="form-control mb-2" required placeholder="Masukkan Nomor Bangku">
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                  <button type="submit" name="simpan" class="btn btn-primary">Simpan Perubahan</button>
+                  <button type="submit" name="simpan" class="btn btn-primary">Submit</button>
                   </form>
                 </div>
               </div>
@@ -113,7 +115,8 @@ include "header.php";
                     <th width=5%>No</th>
                     <th>Nama Pelanggan</th>
                     <th>Tanggal Transaksi</th>
-                    <th>Jenis Barang</th>
+                    <th>Nomor Bangku</th>
+                    <th>Nama Barang</th>
                     <th>Harga</th>
                     <th>Status</th>
                   </tr>
@@ -124,6 +127,7 @@ include "header.php";
                       <th class="text-center"><?= $no; ?></th>
                       <th><?= $transaksi['nama_user']; ?></th>
                       <th><?= $transaksi['tanggal']; ?></th>
+                      <th><?= $transaksi['no_tiket']; ?></th>
                       <th><?= $transaksi['nama_produk']; ?></th>
                       <th>Rp. <?= number_format($transaksi['harga']); ?></th>
                       <th class="text-center">

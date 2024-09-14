@@ -74,7 +74,7 @@ include "header.php";
                     <th width=5%>No</th>
                     <th>Nama Pelanggan</th>
                     <th>Tanggal Transaksi</th>
-                    <th>Nomor Tiket</th>
+                    <th>Nomor Bangku</th>
                     <th style="width: 65px;">Berat</th>
                     <th style="width: 130px;">Durasi (Jam/Menit)</th>
                     <th width=12% class="text-center">Status</th>

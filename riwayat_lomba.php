@@ -9,15 +9,32 @@ $sql_lomba = sql("SELECT * FROM orders WHERE id_pelanggan = '$_SESSION[id_pelang
 
 function cekJuara($id_user, $tanggal_lomba)
 {
+  // Cek apakah user tersebut sudah menjadi juara
   $sql_juara = sql("SELECT juara FROM pemenang WHERE id_user = '$id_user' AND tanggal_lomba = '$tanggal_lomba'");
 
   if ($sql_juara->num_rows > 0) {
     $juara = $sql_juara->fetch_assoc();
     return "Juara " . $juara['juara'];
-  } else {
-    return "Peserta";
   }
+
+  // Tambahkan pengecekan jika status pesanan masih belum diproses berdasarkan id_pelanggan dan tanggal_lomba
+  $sql_status = sql("SELECT `status` FROM orders WHERE id_pelanggan = '$id_user' AND tanggal = '$tanggal_lomba' AND `status` = 'belum diproses'");
+
+  if ($sql_status->num_rows > 0) {
+    return "Booking";
+  }
+
+  $sql_status = sql("SELECT `status` FROM orders WHERE id_pelanggan = '$id_user' AND tanggal = '$tanggal_lomba' AND `status` = 'Cancel'");
+
+  if ($sql_status->num_rows > 0) {
+    return "Canceled";
+  }
+
+  // Jika tidak menjadi juara dan tidak dalam status booking
+  return "Peserta";
 }
+
+
 
 
 ?>
@@ -95,7 +112,7 @@ function cekJuara($id_user, $tanggal_lomba)
                     <h5 class="">Tanggal Lomba</h5>
                   </div>
                   <div class="col-3">
-                    <h5 class="">Tiket Lomba</h5>
+                    <h5 class="">Nomor Bangku</h5>
                   </div>
                   <div class="col-3">
                     <h5 class="">Bukti Bayar</h5>
@@ -129,7 +146,7 @@ function cekJuara($id_user, $tanggal_lomba)
                             </div>
                             <div class="modal-body">
                               <div class="card bg-dark text-white">
-                                <img src="../images/bukti_bayar/<?= $lomba['bukti_transfer']; ?>" class="card-img" alt="...">
+                                <img src="images/bukti_bayar/<?= $lomba['bukti_transfer']; ?>" class="card-img" alt="...">
                               </div>
                             </div>
                             <div class="modal-footer">

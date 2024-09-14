@@ -20,6 +20,17 @@
   <link href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.13.4/b-2.3.6/b-colvis-2.3.6/b-html5-2.3.6/b-print-2.3.6/datatables.min.css" rel="stylesheet" />
 
 
+  <style>
+    body {
+      background-color: #636b65 !important;
+      /* Abu-abu */
+    }
+
+    .content-wrapper {
+      background-color: #636b65 !important;
+      /* Abu-abu untuk konten utama */
+    }
+  </style>
 </head>
 
 <body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
