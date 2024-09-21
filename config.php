@@ -293,25 +293,31 @@ function saveBerat()
   $berat = $_POST["berat"];
   $durasi = $_POST["durasi"];
   $id = $_POST["id"];
+  $status = 'Done'; // Status harus didefinisikan sebagai string
 
   $conn = koneksi();
 
   if ($conn) {
-    // Menggunakan prepared statement untuk menghindari SQL Injection
-    $stmt = $conn->prepare("UPDATE orders SET berat = $berat, durasi= $durasi WHERE id = $id");
+    // Menggunakan prepared statement untuk query
+    $stmt = $conn->prepare("UPDATE orders SET berat = ?, durasi = ?, `status` = ? WHERE id = ?");
+    $stmt->bind_param("ddsi", $berat, $durasi, $status, $id); // Mengikat parameter dengan tipe data yang sesuai
+
     if ($stmt->execute()) {
       echo "<script>
-                  alert('Berhasil Diubah!');
-                  window.location.href='daftar_lomba.php';
-                </script>";
+              alert('Berhasil Diubah!');
+              window.location.href='daftar_lomba.php';
+            </script>";
     } else {
       echo "<script>
-                  alert('Pesanan Anda Gagal!');
-                  window.location.href='daftar_lomba.php';
-                </script>";
+              alert('Pesanan Anda Gagal!');
+              window.location.href='daftar_lomba.php';
+            </script>";
     }
+
+    $stmt->close(); // Menutup statement
   }
 }
+
 
 function saveJual()
 {

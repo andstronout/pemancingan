@@ -71,13 +71,13 @@ include "header.php";
                 // Jika data belum ada, ambil 3 data teratas dari tabel orders
                 $sql_produk = sql(
                   "SELECT * 
-       FROM orders 
-       INNER JOIN user ON orders.id_pelanggan = user.id_user 
-       WHERE `status` = 'Fishing' 
-         AND tanggal = '$tanggal' 
-         AND orders.berat IS NOT NULL 
-       ORDER BY `orders`.`berat` DESC, `orders`.`durasi` ASC 
-       LIMIT 3"
+                    FROM orders 
+                    INNER JOIN user ON orders.id_pelanggan = user.id_user 
+                    WHERE `status` = 'Done' 
+                      AND tanggal = '$tanggal' 
+                      AND orders.berat IS NOT NULL 
+                    ORDER BY `orders`.`berat` DESC, `orders`.`durasi` ASC 
+                    LIMIT 3"
                 );
 
                 $id_user = [];
