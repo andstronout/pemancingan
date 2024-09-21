@@ -142,8 +142,8 @@ include "header.php";
                         <?php } else { ?>
                           <input type="number" name="durasi" id="durasiInput" step="0.01" style="width: 40%; margin-right:7px;" oninput="toggleCheckbox(this)" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                           <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="5" onchange="toggleInput(this)" name="durasi">
-                            <label class="form-check-label" for="inlineCheckbox1">5 Jam</label>
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="2" onchange="toggleInput(this)" name="durasi">
+                            <label class="form-check-label" for="inlineCheckbox1">2 Jam</label>
                           </div>
                         <?php } ?>
                       </td>
