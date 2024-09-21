@@ -99,7 +99,7 @@ include "header.php";
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="submit" name="cari" class="btn btn-primary">Cari</button>
+                  <button type="submit" name="cari" class="btn btn-primary" onclick="return confirm('Apakah semua pemancing sudah done?')">Cari</button>
                   </form>
                 </div>
               </div>
@@ -191,8 +191,8 @@ include "header.php";
                                     <!-- Input untuk Durasi -->
                                     <label for="editDurasi">Masukkan Durasi (Jam/Menit)</label>
                                     <input type="number" name="durasi" id="durasiInput" step="0.01" class="form-control mb-3" oninput="toggleCheckbox(this)" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
-                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="5" onchange="toggleInput(this)" name="durasi">
-                                    <label class="form-check-label" for="inlineCheckbox1">5 Jam</label>
+                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="2" onchange="toggleInput(this)" name="durasi">
+                                    <label class="form-check-label" for="inlineCheckbox1">2 Jam</label>
                                 </div>
                                 <div class="modal-footer">
                                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

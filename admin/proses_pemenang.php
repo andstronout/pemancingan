@@ -117,7 +117,10 @@ include "header.php";
                     }
                   }
                 } else {
-                  echo "Tidak ada data yang ditemukan untuk tanggal: $tanggal.";
+                  echo "<script>
+                  alert('Belum ada perlombaan!');
+                  window.location.href='daftar_lomba.php';
+                </script>";;
                 }
               }
               ?>
